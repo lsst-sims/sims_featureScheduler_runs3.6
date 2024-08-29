@@ -23,6 +23,9 @@ from rubin_scheduler.scheduler.surveys import (
     LongGapSurvey,
     ScriptedSurvey,
     generate_ddf_scheduled_obs,
+    gen_roman_off_season,
+    gen_roman_on_season,
+    gen_too_surveys
 )
 from rubin_scheduler.scheduler.utils import (
     ConstantFootprint,
@@ -32,10 +35,7 @@ from rubin_scheduler.scheduler.utils import (
 from rubin_scheduler.site_models import Almanac
 from rubin_scheduler.utils import _hpid2_ra_dec
 
-from gen_too_surveys import gen_too_surveys
 from gen_events import gen_all_events
-
-from roman_survey import gen_roman_off_season, gen_roman_on_season
 
 # So things don't fail on hyak
 iers.conf.auto_download = False
@@ -1445,7 +1445,7 @@ def example_scheduler(args):
     camera_ddf_rot_limit = 75.0  # degrees
 
     fileroot, extra_info = set_run_info(
-        dbroot=dbroot, file_end="v3.5_", out_dir=out_dir
+        dbroot=dbroot, file_end="v3.6_", out_dir=out_dir
     )
 
     pattern_dict = {
@@ -1597,13 +1597,13 @@ def example_scheduler(args):
             split_long=split_long,
         )
         surveys = [toos, roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
-        fileroot = fileroot.replace("baseline", "too")
 
     else:
         surveys = [roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
 
         sim_ToOs = None
         event_table = None
+        fileroot = fileroot.replace("baseline", "no_too")
 
     scheduler = CoreScheduler(surveys, nside=nside)
 
@@ -1727,8 +1727,8 @@ def sched_argparser():
     parser.add_argument("--split_long", dest="split_long", action="store_true")
     parser.set_defaults(split_long=False)
 
-    parser.add_argument("--too", dest="too", action="store_true")
-    parser.set_defaults(too=False)
+    parser.add_argument("--no_too", dest="too", action="store_false")
+    parser.set_defaults(too=True)
 
     return parser
 

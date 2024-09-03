@@ -206,9 +206,7 @@ def gen_sso_events(n_events=300, twi_fraction=0.75, seed=52, radius=2.0):
 
     rng = np.random.default_rng(seed=seed)
 
-    con = sqlite3.connect(
-        "baseline_v3.5_10yrs.db"
-    )  # "../baseline/baseline_v3.4_10yrs.db")
+    con = sqlite3.connect("../baseline/no_too_v3.6_10yrs.db")
     df = pd.read_sql(
         'select fieldRA as ra,fieldDec as dec, observationStartMJD from observations where scheduler_note like "twilight%"',
         con,

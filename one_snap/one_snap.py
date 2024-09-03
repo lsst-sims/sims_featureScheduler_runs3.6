@@ -25,7 +25,7 @@ from rubin_scheduler.scheduler.surveys import (
     generate_ddf_scheduled_obs,
     gen_roman_off_season,
     gen_roman_on_season,
-    gen_too_surveys,
+    gen_too_surveys
 )
 from rubin_scheduler.scheduler.utils import (
     ConstantFootprint,
@@ -1111,7 +1111,8 @@ def ddf_surveys(
     if nexp == 1:
         nsnaps = [1, 1, 1, 1, 1, 1]
     obs_array = generate_ddf_scheduled_obs(
-        season_unobs_frac=season_unobs_frac, expt=expt, nsnaps=nsnaps
+        season_unobs_frac=season_unobs_frac, expt=expt,
+        nsnaps=nsnaps
     )
     euclid_obs = np.where(
         (obs_array["scheduler_note"] == "DD:EDFS_b")
@@ -1603,7 +1604,7 @@ def example_scheduler(args):
             detailer_list=detailer_list,
             too_footprint=too_footprint,
             split_long=split_long,
-            n_snaps=nexp,
+            n_snaps=nexp
         )
         surveys = [toos, roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
 
@@ -1655,7 +1656,7 @@ def sched_argparser():
         help="illumination limit to remove u-band",
     )
     parser.add_argument(
-        "--nexp", type=int, default=2, help="Number of exposures per visit"
+        "--nexp", type=int, default=1, help="Number of exposures per visit"
     )
     parser.add_argument(
         "--rolling_nslice",

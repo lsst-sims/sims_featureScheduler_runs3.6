@@ -1,0 +1,2 @@
+
+rsync -av --progress slacd:"/sdf/home/y/yoachim/runs36/maf/summary.h5" .

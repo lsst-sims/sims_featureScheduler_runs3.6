@@ -1176,7 +1176,6 @@ def generate_twilight_near_sun(
     min_alt=20.0,
     max_alt=76.0,
     max_elong=60.0,
-    az_range=180.0,
     ignore_obs=["DD", "pair", "long", "blob", "greedy"],
     filter_dist_weight=0.3,
     time_to_12deg=25.0,
@@ -1335,7 +1334,6 @@ def generate_twilight_near_sun(
                 dither=True,
                 nexp=nexp,
                 detailers=detailer_list,
-                az_range=az_range,
                 twilight_scale=False,
                 min_area=min_area,
             )
@@ -1393,7 +1391,7 @@ def run_sched(
     observatory, scheduler, observations = sim_runner(
         observatory,
         scheduler,
-        survey_length=survey_length,
+        sim_duration=survey_length,
         filename=filename,
         delete_past=True,
         n_visit_limit=n_visit_limit,

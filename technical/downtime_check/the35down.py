@@ -239,7 +239,7 @@ class UnscheduledDowntimeDataYearOne:
         return total
 
 
-def new_downtimes(mjd_start=None):
+def new_downtimes(mjd_start=None, seed=42):
     """return the array of new downtimes
     """
     almanac = site_models.Almanac(mjd_start=mjd_start)
@@ -249,11 +249,11 @@ def new_downtimes(mjd_start=None):
 
     mjd_start_time = Time(mjd_start, format="mjd")
     sched_downtime_data = site_models.ScheduledDowntimeData(mjd_start_time)
-    unsched_downtime = UnscheduledDowntimeDataYearOne(sunsets=sunset, sunrises=sunrise)
+    unsched_downtime = UnscheduledDowntimeDataYearOne(sunsets=sunset, sunrises=sunrise, seed=seed)
     unscheduled_downtimes = unsched_downtime()
 
     mjd_start_time = Time(mjd_start+365, format="mjd")
-    reg_dt = site_models.UnscheduledDowntimeData(mjd_start_time)
+    reg_dt = site_models.UnscheduledDowntimeData(mjd_start_time, seed=seed)
     regular_downtimes = reg_dt()
 
     down_starts = []
@@ -267,9 +267,6 @@ def new_downtimes(mjd_start=None):
         down_starts.append(dt["start"].mjd)
         down_ends.append(dt["end"].mjd)
 
-    for dt in sched_downtime_data():
-        down_starts.append(dt["start"].mjd)
-        down_ends.append(dt["end"].mjd)
 
     downtimes = np.array(
         list(zip(down_starts, down_ends)),

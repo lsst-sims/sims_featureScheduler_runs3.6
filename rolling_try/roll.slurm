@@ -8,7 +8,7 @@
 #SBATCH --error=output-%j.txt
 #
 #SBATCH --nodes=1                       # Number of nodes
-#SBATCH --ntasks=8
+#SBATCH --ntasks=12
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=20g
 #
@@ -25,16 +25,16 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
-cat rolling_try.sh | parallel -j 8
+#cat rolling_try.sh | parallel -j 8
 
-# rm maf.sh
-# 
-# ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
-# 
-# generate_ss
-# cat ss_script.sh >> maf.sh
-# 
-# cat maf.sh | parallel -j 6
+rm maf.sh
+
+ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
+ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
+ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
+ls *10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
+
+generate_ss
+cat ss_script.sh >> maf.sh
+
+cat maf.sh | parallel -j 8

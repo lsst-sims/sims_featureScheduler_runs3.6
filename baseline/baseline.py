@@ -347,9 +347,6 @@ def blob_for_long(
         "slew_approx": 7.5,
         "filter_change_approx": 140.0,
         "read_approx": 2.0,
-        "search_radius": 30.0,
-        "alt_max": 85.0,
-        "az_range": None,
         "flush_time": 30.0,
         "smoothing_kernel": None,
         "nside": nside,
@@ -419,7 +416,7 @@ def blob_for_long(
         bfs.append((bf.TimeToTwilightBasisFunction(time_needed=time_needed), 0.0))
         bfs.append((bf.NotTwilightBasisFunction(), 0.0))
         bfs.append((bf.AfterEveningTwiBasisFunction(time_after=time_after_twi), 0.0))
-        bfs.append((bf.HaMaskBasisFunction(ha_min=HA_min, ha_max=HA_max), 0.0))
+        bfs.append((bf.HaMaskBasisFunction(ha_min=HA_min, ha_max=HA_max, nside=nside), 0.0))
         # don't execute every night
         bfs.append((bf.NightModuloBasisFunction(night_pattern), 0.0))
         # only execute one blob per night
@@ -732,9 +729,6 @@ def generate_blobs(
         "slew_approx": 7.5,
         "filter_change_approx": 140.0,
         "read_approx": 2.0,
-        "search_radius": 30.0,
-        "alt_max": 85.0,
-        "az_range": None,
         "flush_time": 30.0,
         "smoothing_kernel": None,
         "nside": nside,
@@ -969,9 +963,6 @@ def generate_twi_blobs(
         "slew_approx": 7.5,
         "filter_change_approx": 140.0,
         "read_approx": 2.0,
-        "search_radius": 30.0,
-        "alt_max": 85.0,
-        "az_range": None,
         "flush_time": 30.0,
         "smoothing_kernel": None,
         "nside": nside,
@@ -1185,7 +1176,6 @@ def generate_twilight_near_sun(
     min_alt=20.0,
     max_alt=76.0,
     max_elong=60.0,
-    az_range=180.0,
     ignore_obs=["DD", "pair", "long", "blob", "greedy"],
     filter_dist_weight=0.3,
     time_to_12deg=25.0,
@@ -1344,7 +1334,6 @@ def generate_twilight_near_sun(
                 dither=True,
                 nexp=nexp,
                 detailers=detailer_list,
-                az_range=az_range,
                 twilight_scale=False,
                 min_area=min_area,
             )
@@ -1402,7 +1391,7 @@ def run_sched(
     observatory, scheduler, observations = sim_runner(
         observatory,
         scheduler,
-        survey_length=survey_length,
+        sim_duration=survey_length,
         filename=filename,
         delete_past=True,
         n_visit_limit=n_visit_limit,
@@ -1448,7 +1437,7 @@ def example_scheduler(args):
     camera_ddf_rot_limit = 75.0  # degrees
 
     fileroot, extra_info = set_run_info(
-        dbroot=dbroot, file_end="v3.6_", out_dir=out_dir
+        dbroot=dbroot, file_end="v4.0_", out_dir=out_dir
     )
 
     pattern_dict = {
